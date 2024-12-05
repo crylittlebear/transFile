@@ -6,13 +6,15 @@
 #include <QTcpServer>
 #include <QVector>
 
+#include "dragwidget.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public DragWidget
 {
     Q_OBJECT
 
@@ -20,11 +22,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    void init();
+
 private slots:
+    void sltOpenRecvDir();
 
-    void on_btnListen_clicked();
+    void on_tBtnClose_clicked();
 
-    void on_btnOpen_clicked();
+    // void on_tBtnOpen_clicked();
 
 private:
     Ui::MainWindow *ui;

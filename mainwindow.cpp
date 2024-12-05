@@ -6,17 +6,15 @@
 #include <QDesktopServices>
 
 #include "serverthread.h"
+#include "downloaditemwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : DragWidget(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/img/cloud.png"));
-    setWindowTitle("服务器");
-    server_ = new QTcpServer(this);
 
-    ui->lineEdit->setText("6666");
+    init();
 }
 
 MainWindow::~MainWindow()
@@ -24,11 +22,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_btnListen_clicked()
+void MainWindow::init()
 {
-    quint16 port = ui->lineEdit->text().toUInt();
+    setWindowFlag(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowIcon(QIcon(":/img/cloud.png"));
+    setWindowTitle("服务器");
+    server_ = new QTcpServer(this);
+
+    quint16 port = 8086;
     server_->listen(QHostAddress::Any, port);
-    ui->plainTextEdit->appendPlainText(QString("start listen on port: %1").arg(port));
 
     connect(server_, &QTcpServer::newConnection, this, [=](){
         QTcpSocket* socket = server_->nextPendingConnection();
@@ -37,25 +40,44 @@ void MainWindow::on_btnListen_clicked()
         }
         ServerThread* thread = new ServerThread(socket, this);
         connect(thread, &ServerThread::recvPiece, [=](FileMetaData metaData) {
-            ui->progressBar->setMaximum(metaData.totalSize);
-            ui->progressBar->setValue(metaData.offset + metaData.dataSize);
-            ui->labelFileName->setText(QString(metaData.fileName));
-            ui->plainTextEdit->appendPlainText(QString("recv piece at: %1").arg(metaData.offset));
-        });
-        connect(thread, &ServerThread::recvLast, [=]() {
-            ui->plainTextEdit->appendPlainText(QString("recv last piece of file!!!!!!!"));
+            // 如果接收到第一块数据，创建一个ListWidgetItem
+            QListWidgetItem* item;
+            DownloadItemWidget* widget;
+            if (metaData.offset == 0) {
+                item = new QListWidgetItem;
+                ui->listWidget->insertItem(0, item);
+                item->setSizeHint(QSize(ui->listWidget->width(), 40));
+                widget = new DownloadItemWidget;
+                widget->setLabel("://img/picture.png");
+                widget->setFileText(QString(metaData.fileName));
+                widget->setProgressBarMax(metaData.totalSize);
+                widget->setProgressBarValue(metaData.offset + metaData.dataSize);
+                ui->listWidget->setItemWidget(item, widget);
+            } else {
+                item = ui->listWidget->item(0);
+                widget = static_cast<DownloadItemWidget*>(ui->listWidget->itemWidget(item));
+                widget->setProgressBarValue(metaData.offset + metaData.dataSize);
+            }
+            if (metaData.offset + metaData.dataSize == metaData.totalSize) {
+                widget->setToolButtonEnable();
+            }
+            connect(widget, &DownloadItemWidget::sigBtnOpenDir, this, &MainWindow::sltOpenRecvDir);
         });
         thread->start();
     });
 }
 
-
-void MainWindow::on_btnOpen_clicked()
+void MainWindow::sltOpenRecvDir()
 {
     QString path = QDir::currentPath();
-    qDebug() << "path = " << path;
     path += "/RecvFiles";
     QUrl url(path);
     QDesktopServices::openUrl(url);
 }
+
+void MainWindow::on_tBtnClose_clicked()
+{
+    this->close();
+}
+
 

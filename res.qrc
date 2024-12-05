@@ -1,5 +1,25 @@
 <RCC>
     <qresource prefix="/">
         <file>img/cloud.png</file>
+        <file>img/close.png</file>
+        <file>img/download.png</file>
+        <file>img/file.png</file>
+        <file>img/fullscreen.png</file>
+        <file>img/gear.png</file>
+        <file>img/group.png</file>
+        <file>img/lock.png</file>
+        <file>img/minus (1).png</file>
+        <file>img/minus (2).png</file>
+        <file>img/music.png</file>
+        <file>img/mute1.png</file>
+        <file>img/person.png</file>
+        <file>img/picture.png</file>
+        <file>img/share.png</file>
+        <file>img/signal.png</file>
+        <file>img/sound1.png</file>
+        <file>img/trash (1).png</file>
+        <file>img/upload.png</file>
+        <file>img/user.png</file>
+        <file>img/video.png</file>
     </qresource>
 </RCC>

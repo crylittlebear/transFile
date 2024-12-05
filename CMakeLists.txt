@@ -25,6 +25,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         mainwindow.cpp mainwindow.h mainwindow.ui serverthread.cpp serverthread.h
         res.qrc
+        dragwidget.cpp dragwidget.h
+        downloaditemwidget.h downloaditemwidget.cpp downloaditemwidget.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ServerWithIcon APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
