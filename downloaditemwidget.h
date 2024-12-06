@@ -2,6 +2,7 @@
 #define DOWNLOADITEMWIDGET_H
 
 #include <QWidget>
+#include "progressbar.h"
 
 namespace Ui {
 class DownloadItemWidget;
@@ -19,16 +20,22 @@ public:
 
     void setFileText(QString text);
 
-    void setProgressBarMax(quint64  value);
-
-    void setProgressBarValue(quint64 value);
-
     void setToolButtonEnable();
+
+    void setProgressBarMax(quint64 val);
+
+    void setProgressBarValue(quint64 val);
+
+    void setProgressBarColor(QColor color);
+
+    QString fileName() const;
 
 signals:
     void sigBtnOpenDir(QString fileName);
 
 private slots:
+    void sltShowPercent(quint8 percent);
+
     void on_tBtnOpenDir_clicked();
 
 private:

@@ -18,7 +18,6 @@ DownloadItemWidget::~DownloadItemWidget()
 void DownloadItemWidget::setLabel(QString labelPath)
 {
     QPixmap pixmap(labelPath);
-    // qDebug() << "labelsize = " << ui->labelIcon->width() << ", " << ui->labelIcon->height();
     ui->labelIcon->setPixmap(pixmap.scaled(ui->labelIcon->size()));
 }
 
@@ -27,19 +26,39 @@ void DownloadItemWidget::setFileText(QString text)
     ui->labelText->setText(text);
 }
 
-void DownloadItemWidget::setProgressBarMax(quint64 value)
-{
-    ui->progressBar->setMaximum(value);
-}
-
-void DownloadItemWidget::setProgressBarValue(quint64 value)
-{
-    ui->progressBar->setValue(value);
-}
-
 void DownloadItemWidget::setToolButtonEnable()
 {
     ui->tBtnOpenDir->setEnabled(true);
+}
+
+void DownloadItemWidget::setProgressBarMax(quint64 val)
+{
+    ProgressBar* bar = static_cast<ProgressBar*>(ui->progressBar);
+    bar->setMaxValue(val);
+}
+
+void DownloadItemWidget::setProgressBarValue(quint64 val)
+{
+    ProgressBar* bar = static_cast<ProgressBar*>(ui->progressBar);
+    bar->setCurValue(val);
+}
+
+void DownloadItemWidget::setProgressBarColor(QColor color)
+{
+    ProgressBar* bar = static_cast<ProgressBar*>(ui->progressBar);
+    bar->setColor(color);
+
+    connect(bar, &ProgressBar::sigPercent, this, &DownloadItemWidget::sltShowPercent);
+}
+
+QString DownloadItemWidget::fileName() const
+{
+    return ui->labelText->text();
+}
+
+void DownloadItemWidget::sltShowPercent(quint8 percent)
+{
+    ui->labelPercent->setText(QString("%1 %").arg(percent));
 }
 
 void DownloadItemWidget::on_tBtnOpenDir_clicked()

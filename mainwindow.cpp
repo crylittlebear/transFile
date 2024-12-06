@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QAudioOutput>
 
 #include "downloaditemwidget.h"
 
@@ -43,6 +44,17 @@ void MainWindow::init()
         connect(thread, &ServerThread::recvPiece, this, &MainWindow::sltHandleRecvPiece, Qt::QueuedConnection);
         thread->start();
     });
+
+    connect(ui->tBtnMusic, &QToolButton::clicked, [=]() {
+        ui->stackedWidget->setCurrentWidget(ui->page_music);
+    });
+    connect(ui->tBtnVideo, &QToolButton::clicked, [=]() {
+        ui->stackedWidget->setCurrentWidget(ui->page_video);
+    });
+    connect(ui->tBtnUpload, &QToolButton::clicked, [=]() {
+        ui->stackedWidget->setCurrentWidget(ui->page_upload);
+    });
+    ui->stackedWidget->setCurrentWidget(ui->page_upload);
 }
 
 void MainWindow::sltOpenRecvDir(QString fileName)
@@ -65,6 +77,7 @@ void MainWindow::sltHandleRecvPiece(const FileMetaData &metaData)
         widget = new DownloadItemWidget;
         widget->setLabel("://img/picture.png");
         widget->setFileText(QString(metaData.fileName));
+        widget->setProgressBarColor(QColor(0, 62, 91));
         widget->setProgressBarMax(metaData.totalSize);
         widget->setProgressBarValue(metaData.offset + metaData.dataSize);
         ui->listWidget->setItemWidget(item, widget);
@@ -91,4 +104,21 @@ void MainWindow::on_tBtnClose_clicked()
     this->close();
 }
 
+// 双击ListWIdget中的项，如果是视频直接播放
+void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_video);
+    DownloadItemWidget* widget = static_cast<DownloadItemWidget*>(ui->listWidget->itemWidget(item));
+    QString fileName = widget->fileName();
+    QString filePath = QDir::currentPath() + "/RecvFiles/" + fileName;
+    qDebug() << filePath;
+    if (!player_) {
+        player_ = new QMediaPlayer(this);
+    }
+    QAudioOutput* audio = new QAudioOutput(this);
+    player_->setAudioOutput(audio);
+    player_->setVideoOutput(ui->videoWidget);
+    player_->setSource(QUrl(filePath));
+    player_->play();
+}
 

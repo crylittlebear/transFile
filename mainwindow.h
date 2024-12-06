@@ -5,6 +5,8 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QVector>
+#include <QMediaPlayer>
+#include <QListWidgetItem>
 
 #include "dragwidget.h"
 #include "serverthread.h"
@@ -34,9 +36,13 @@ private slots:
     void on_tBtnClose_clicked();
     // void on_tBtnOpen_clicked();
 
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
 
     QTcpServer* server_;
+
+    QMediaPlayer* player_ = nullptr;
 };
 #endif // MAINWINDOW_H

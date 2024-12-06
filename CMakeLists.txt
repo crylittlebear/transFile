@@ -9,8 +9,10 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+include_directories(${PROJECT_SOURCE_DIR})
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network MultimediaWidgets Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network MultimediaWidgets Multimedia)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -27,6 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         res.qrc
         dragwidget.cpp dragwidget.h
         downloaditemwidget.h downloaditemwidget.cpp downloaditemwidget.ui
+        progressbar.cpp progressbar.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ServerWithIcon APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -46,7 +49,8 @@ else()
     endif()
 endif()
 
-target_link_libraries(ServerWithIcon PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(ServerWithIcon PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::MultimediaWidgets Qt${QT_VERSION_MAJOR}::Multimedia)
 
 if(WIN32)
     set(APP_ICON_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/icon.rc")
