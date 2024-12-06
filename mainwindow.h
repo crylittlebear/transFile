@@ -10,6 +10,7 @@
 
 #include "dragwidget.h"
 #include "serverthread.h"
+#include "musiclistwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,6 +30,8 @@ private:
     void init();
 
 private slots:
+    void sltBtnMusicClicked();
+
     void sltOpenRecvDir(QString fileName);
 
     void sltHandleRecvPiece(const FileMetaData& metaData);

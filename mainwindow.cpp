@@ -45,9 +45,7 @@ void MainWindow::init()
         thread->start();
     });
 
-    connect(ui->tBtnMusic, &QToolButton::clicked, [=]() {
-        ui->stackedWidget->setCurrentWidget(ui->page_music);
-    });
+    connect(ui->tBtnMusic, &QToolButton::clicked, this, &MainWindow::sltBtnMusicClicked);
     connect(ui->tBtnVideo, &QToolButton::clicked, [=]() {
         ui->stackedWidget->setCurrentWidget(ui->page_video);
     });
@@ -55,6 +53,31 @@ void MainWindow::init()
         ui->stackedWidget->setCurrentWidget(ui->page_upload);
     });
     ui->stackedWidget->setCurrentWidget(ui->page_upload);
+}
+
+void MainWindow::sltBtnMusicClicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_music);
+    // 打开Recv文件夹下的音频文件
+    QDir dir;
+    dir.setCurrent(QDir::currentPath() + "/RecvFiles/");
+    // qDebug() << dir.currentPath();
+    QStringList entryList = dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+    for (int i = 0; i < entryList.size(); ++i) {
+        // qDebug() << entryList.at(i);
+        QString filePath = entryList.at(i);
+        QString suffix = filePath.right(filePath.size() - filePath.lastIndexOf('.') - 1);
+        qDebug() << suffix;
+        if (suffix == "flac" || suffix == "mp3" || suffix == "wav") {
+            QListWidgetItem* item = new QListWidgetItem;
+            ui->listWidgetMusicList->insertItem(0, item);
+            item->setSizeHint(QSize(ui->listWidgetMusicList->width(), 40));
+            MusicListWidget* widget = new MusicListWidget;
+            widget->setIcon("://img/interface/music-notes.png");
+            widget->setName(filePath);
+            ui->listWidgetMusicList->setItemWidget(item, widget);
+        }
+    }
 }
 
 void MainWindow::sltOpenRecvDir(QString fileName)

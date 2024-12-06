@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>413</height>
+    <width>789</width>
+    <height>547</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -291,7 +291,7 @@ QToolButton:hover
            <widget class="QWidget" name="widget_3" native="true">
             <property name="minimumSize">
              <size>
-              <width>60</width>
+              <width>80</width>
               <height>0</height>
              </size>
             </property>
@@ -350,11 +350,11 @@ QToolButton
                 </font>
                </property>
                <property name="text">
-                <string> 打开</string>
+                <string>  打开</string>
                </property>
                <property name="icon">
                 <iconset resource="res.qrc">
-                 <normaloff>:/img/file.png</normaloff>:/img/file.png</iconset>
+                 <normaloff>:/img/interface/folder.png</normaloff>:/img/interface/folder.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -385,11 +385,11 @@ QToolButton
                 </font>
                </property>
                <property name="text">
-                <string> 上传</string>
+                <string>  上传</string>
                </property>
                <property name="icon">
                 <iconset resource="res.qrc">
-                 <normaloff>:/img/upload.png</normaloff>:/img/upload.png</iconset>
+                 <normaloff>:/img/interface/upload (1).png</normaloff>:/img/interface/upload (1).png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -420,11 +420,11 @@ QToolButton
                 </font>
                </property>
                <property name="text">
-                <string> 音乐</string>
+                <string>  音乐</string>
                </property>
                <property name="icon">
                 <iconset resource="res.qrc">
-                 <normaloff>:/img/music.png</normaloff>:/img/music.png</iconset>
+                 <normaloff>:/img/interface/music-notes.png</normaloff>:/img/interface/music-notes.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -455,11 +455,11 @@ QToolButton
                 </font>
                </property>
                <property name="text">
-                <string> 视频</string>
+                <string>  视频</string>
                </property>
                <property name="icon">
                 <iconset resource="res.qrc">
-                 <normaloff>:/img/video.png</normaloff>:/img/video.png</iconset>
+                 <normaloff>:/img/interface/video-camera.png</normaloff>:/img/interface/video-camera.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -503,11 +503,11 @@ QToolButton
                 </font>
                </property>
                <property name="text">
-                <string> 设置</string>
+                <string>  设置</string>
                </property>
                <property name="icon">
                 <iconset resource="res.qrc">
-                 <normaloff>:/img/gear.png</normaloff>:/img/gear.png</iconset>
+                 <normaloff>:/img/interface/settings.png</normaloff>:/img/interface/settings.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -528,6 +528,9 @@ QToolButton
           </item>
           <item>
            <widget class="QStackedWidget" name="stackedWidget">
+            <property name="currentIndex">
+             <number>2</number>
+            </property>
             <widget class="QWidget" name="page_upload">
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
@@ -568,7 +571,394 @@ QToolButton
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="page_music"/>
+            <widget class="QWidget" name="page_music">
+             <property name="styleSheet">
+              <string notr="true">QWidget#page_music
+{
+	border-radius: 5px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: rgb(184, 184, 184);
+}</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QWidget" name="widgetMusicDisplay" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="styleSheet">
+                    <string notr="true">background-color: black;</string>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetCtlBtns" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>36</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true"/>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_4">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>3</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>3</number>
+                    </property>
+                    <item>
+                     <spacer name="horizontalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QToolButton" name="toolButton_2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>70</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>上一曲</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="res.qrc">
+                        <normaloff>:/img/previous.png</normaloff>:/img/previous.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="toolButtonStyle">
+                       <enum>Qt::ToolButtonTextBesideIcon</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QToolButton" name="toolButton_6">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string> 播放</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="res.qrc">
+                        <normaloff>:/img/play (1).png</normaloff>:/img/play (1).png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="toolButtonStyle">
+                       <enum>Qt::ToolButtonTextBesideIcon</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QToolButton" name="toolButton_7">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>70</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string> 下一曲</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="res.qrc">
+                        <normaloff>:/img/next (1).png</normaloff>:/img/next (1).png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="toolButtonStyle">
+                       <enum>Qt::ToolButtonTextBesideIcon</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetCtlBtns_2" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true"/>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QWidget" name="widget_7" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>150</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>150</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_6" native="true"/>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widgetVolunm" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>150</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>150</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_5">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QToolButton" name="toolButton_3">
+                         <property name="minimumSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="res.qrc">
+                           <normaloff>:/img/interface/shuffle.png</normaloff>:/img/interface/shuffle.png</iconset>
+                         </property>
+                         <property name="autoRaise">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QToolButton" name="toolButton">
+                         <property name="minimumSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="res.qrc">
+                           <normaloff>:/img/volume-up.png</normaloff>:/img/volume-up.png</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>20</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="autoRaise">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QWidget" name="widget_5" native="true"/>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QListWidget" name="listWidgetMusicList">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>

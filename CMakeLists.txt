@@ -30,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dragwidget.cpp dragwidget.h
         downloaditemwidget.h downloaditemwidget.cpp downloaditemwidget.ui
         progressbar.cpp progressbar.h
+        musiclistwidget.h musiclistwidget.cpp musiclistwidget.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ServerWithIcon APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

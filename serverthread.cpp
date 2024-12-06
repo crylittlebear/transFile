@@ -25,6 +25,7 @@ void ServerThread::run()
                 break;
             }
             if (!isHeader_) {
+                // qDebug() << QString(metaData_.fileName);
                 QString filePath = "RecvFiles/" + QString(metaData_.fileName);
                 QFile file(filePath);
                 if (!file.open(QIODevice::WriteOnly | QIODevice::Append)) {
