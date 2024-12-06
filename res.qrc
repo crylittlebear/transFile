@@ -53,5 +53,6 @@
         <file>img/interface/video-camera.png</file>
         <file>img/interface/repeat.png</file>
         <file>img/interface/shuffle.png</file>
+        <file>img/interface/searching.png</file>
     </qresource>
 </RCC>
