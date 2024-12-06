@@ -23,7 +23,7 @@ public:
     virtual void run() override;
 
 signals:
-    void recvPiece(FileMetaData metaData);
+    void recvPiece(const FileMetaData &metaData);
 
     void recvLast();
 

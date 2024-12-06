@@ -26,7 +26,7 @@ public:
     void setToolButtonEnable();
 
 signals:
-    void sigBtnOpenDir();
+    void sigBtnOpenDir(QString fileName);
 
 private slots:
     void on_tBtnOpenDir_clicked();

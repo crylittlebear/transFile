@@ -16,7 +16,7 @@ DragWidget::DragWidget(QWidget *parent)
     setWindowFlag(Qt::FramelessWindowHint);
 
     // 设置窗口的最小尺寸
-    setMinimumSize(800, 540);
+    setMinimumSize(700, 480);
 
 
 }

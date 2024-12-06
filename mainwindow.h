@@ -7,6 +7,7 @@
 #include <QVector>
 
 #include "dragwidget.h"
+#include "serverthread.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,10 +27,11 @@ private:
     void init();
 
 private slots:
-    void sltOpenRecvDir();
+    void sltOpenRecvDir(QString fileName);
+
+    void sltHandleRecvPiece(const FileMetaData& metaData);
 
     void on_tBtnClose_clicked();
-
     // void on_tBtnOpen_clicked();
 
 private:

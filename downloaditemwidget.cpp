@@ -44,6 +44,6 @@ void DownloadItemWidget::setToolButtonEnable()
 
 void DownloadItemWidget::on_tBtnOpenDir_clicked()
 {
-    emit sigBtnOpenDir();
+    emit sigBtnOpenDir(ui->labelText->text());
 }
 

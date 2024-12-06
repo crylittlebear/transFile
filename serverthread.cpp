@@ -6,7 +6,7 @@ ServerThread::ServerThread(QTcpSocket* socket, QObject *parent)
     : QThread{parent},
     socket_(socket)
 {
-
+    // connect(this, &ServerThread::finished, this, &QObject::deleteLater);
 }
 
 void ServerThread::run()
