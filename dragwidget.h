@@ -7,13 +7,6 @@
 #define SCALE_WIDTH 10
 #define DRAG_HEITH  32
 
-enum ScaleDirection {
-    None,
-    Right,
-    Down,
-    BottomRight
-};
-
 class DragWidget  : public QMainWindow
 {
     Q_OBJECT
@@ -21,6 +14,9 @@ class DragWidget  : public QMainWindow
 public:
     DragWidget(QWidget *parent);
     ~DragWidget();
+
+    // 设置拖动区域高度
+    void setDragAreaHeight(int height);
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -46,6 +42,14 @@ private:
     bool isInCornerTopRight(QPoint p);
 
 private:
+    // 缩放类型枚举
+    enum class ScaleDirection {
+        None,
+        Right,
+        Down,
+        BottomRight
+    };
+
     // 用于记录鼠标点击位置距离窗口左上角的距离
     QPoint point_;
     // 判断是否正在移动
@@ -54,4 +58,8 @@ private:
     bool isScaling_;
     // 缩放的方向
     ScaleDirection direction_;
+    // 拖动区域高度
+    quint32 dragHeight_;
+    // 缩放区域距离
+    const quint32 scaleDistance_ = 10;
 };

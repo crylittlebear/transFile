@@ -5,24 +5,24 @@
 
 DragWidget::DragWidget(QWidget *parent)
     : QMainWindow(parent)
+    , isMoving_(false)
+    , isScaling_(false)
+    , direction_(ScaleDirection::None)
+    , dragHeight_(32)
 {
-    isMoving_ = false;
-
-    isScaling_ = false;
-
-    direction_ = ScaleDirection::None;
-
     // 设置窗口无边框
     setWindowFlag(Qt::FramelessWindowHint);
-
     // 设置窗口的最小尺寸
     setMinimumSize(700, 480);
-
-
 }
 
 DragWidget::~DragWidget()
 {}
+
+void DragWidget::setDragAreaHeight(int height)
+{
+    dragHeight_ = height;
+}
 
 void DragWidget::mousePressEvent(QMouseEvent * event)
 {
@@ -39,6 +39,8 @@ void DragWidget::mousePressEvent(QMouseEvent * event)
             } else if (isInLeftRightEdge(event->pos())) {
                 direction_ = ScaleDirection::Right;
             }
+        } else if (isInDragArea(event->pos())) {
+            isMoving_ = true;
         }
     }
     event->accept();
@@ -46,33 +48,28 @@ void DragWidget::mousePressEvent(QMouseEvent * event)
 
 void DragWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    if (isInDragArea(event->pos())) {
-        // 如果目前没有处于移动状态
-        if (!isMoving_) {
-            isMoving_ = true;
-        }
-        // 判断是否正在拖动
-        if (isMoving_ && event->buttons() & Qt::LeftButton) {
+    if (event->buttons() & Qt::LeftButton) {
+        if (isScaling_) {
+            int tempWidth = this->geometry().width();
+            int tempHeight = this->geometry().height();
+            switch (direction_) {
+            case ScaleDirection::BottomRight:
+                tempWidth = event->globalPosition().toPoint().x() - this->geometry().x();
+                tempHeight = event->globalPosition().toPoint().y() - this->geometry().y();
+                break;
+            case ScaleDirection::Right:
+                tempWidth = event->globalPosition().toPoint().x() - this->geometry().x();
+                break;
+            case ScaleDirection::Down:
+                tempHeight = event->globalPosition().toPoint().y() - this->geometry().y();
+                break;
+            default:
+                break;
+            }
+            this->resize(tempWidth, tempHeight);
+        } else if (isMoving_) {
             this->move(event->globalPosition().toPoint() - point_);
         }
-    } else if (isScaling_ && (event->buttons() & Qt::LeftButton)){
-        // 如果正在移动，则缩放窗口
-        int tempWidth = 0, tempHeight = 0;
-        switch (direction_) {
-        case ScaleDirection::BottomRight:
-            tempWidth = event->globalPosition().toPoint().x() - this->geometry().x();
-            tempHeight = event->globalPosition().toPoint().y() - this->geometry().y();
-            break;
-        case ScaleDirection::Right:
-            tempWidth = event->globalPosition().toPoint().x() - this->geometry().x();
-            tempHeight = this->geometry().height();
-            break;
-        case ScaleDirection::Down:
-            tempWidth = this->geometry().width();
-            tempHeight = event->globalPosition().toPoint().y() - this->geometry().y();
-            break;
-        }
-        this->resize(tempWidth, tempHeight);
     }
     event->accept();
 }
