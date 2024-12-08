@@ -24,3 +24,8 @@ void MusicListWidget::setName(QString name)
 {
     ui->labelName->setText(name);
 }
+
+QString MusicListWidget::fileName() const
+{
+    return ui->labelName->text();
+}

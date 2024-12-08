@@ -1,31 +1,17 @@
 <RCC>
     <qresource prefix="/">
-        <file>img/cloud.png</file>
         <file>img/close.png</file>
-        <file>img/download.png</file>
-        <file>img/file.png</file>
-        <file>img/fullscreen.png</file>
-        <file>img/gear.png</file>
-        <file>img/group.png</file>
+        <file>img/cloud.png</file>
         <file>img/lock.png</file>
-        <file>img/minus (1).png</file>
-        <file>img/minus (2).png</file>
+        <file>img/minus.png</file>
         <file>img/music.png</file>
-        <file>img/mute1.png</file>
-        <file>img/person.png</file>
+        <file>img/mute.png</file>
+        <file>img/next.png</file>
         <file>img/picture.png</file>
-        <file>img/share.png</file>
-        <file>img/signal.png</file>
-        <file>img/sound1.png</file>
-        <file>img/trash (1).png</file>
-        <file>img/upload.png</file>
-        <file>img/user.png</file>
-        <file>img/video.png</file>
-        <file>img/next (1).png</file>
-        <file>img/play (1).png</file>
+        <file>img/play.png</file>
         <file>img/previous.png</file>
         <file>img/stop.png</file>
-        <file>img/mute.png</file>
+        <file>img/user.png</file>
         <file>img/volume-up.png</file>
         <file>img/interface/add-folder.png</file>
         <file>img/interface/add-heart.png</file>
@@ -35,24 +21,26 @@
         <file>img/interface/download.png</file>
         <file>img/interface/download-file.png</file>
         <file>img/interface/dustbin.png</file>
+        <file>img/interface/folder.png</file>
         <file>img/interface/forward-button.png</file>
+        <file>img/interface/music-notes.png</file>
         <file>img/interface/mute (1).png</file>
         <file>img/interface/pause-button.png</file>
         <file>img/interface/photo.png</file>
         <file>img/interface/play-button.png</file>
         <file>img/interface/repair-tools.png</file>
+        <file>img/interface/repeat.png</file>
+        <file>img/interface/searching.png</file>
+        <file>img/interface/settings.png</file>
+        <file>img/interface/shuffle.png</file>
         <file>img/interface/shut-down.png</file>
         <file>img/interface/stop-button.png</file>
+        <file>img/interface/upload (1).png</file>
         <file>img/interface/upload.png</file>
         <file>img/interface/upload-file.png</file>
         <file>img/interface/video.png</file>
-        <file>img/interface/folder.png</file>
-        <file>img/interface/music-notes.png</file>
-        <file>img/interface/settings.png</file>
-        <file>img/interface/upload (1).png</file>
         <file>img/interface/video-camera.png</file>
-        <file>img/interface/repeat.png</file>
-        <file>img/interface/shuffle.png</file>
-        <file>img/interface/searching.png</file>
+        <file>img/fullscreen.png</file>
+        <file>img/pause.png</file>
     </qresource>
 </RCC>

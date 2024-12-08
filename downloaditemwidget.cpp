@@ -63,6 +63,6 @@ void DownloadItemWidget::sltShowPercent(quint8 percent)
 
 void DownloadItemWidget::on_tBtnOpenDir_clicked()
 {
-    emit sigBtnOpenDir(ui->labelText->text());
+    emit sigBtnOpenDir(true);
 }
 

@@ -19,6 +19,8 @@ public:
 
     void setName(QString name);
 
+    QString fileName() const;
+
 private:
     Ui::MusicListWidget *ui;
 };

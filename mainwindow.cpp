@@ -7,6 +7,7 @@
 #include <QAudioOutput>
 
 #include "downloaditemwidget.h"
+#include "dragslider.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : DragWidget(parent)
@@ -29,6 +30,8 @@ void MainWindow::init()
     setWindowIcon(QIcon(":/img/cloud.png"));
     setWindowTitle("服务器");
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->listWidgetMusicList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->listWidgetMusicList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     server_ = new QTcpServer(this);
 
     quint16 port = 8086;
@@ -52,40 +55,84 @@ void MainWindow::init()
     connect(ui->tBtnUpload, &QToolButton::clicked, [=]() {
         ui->stackedWidget->setCurrentWidget(ui->page_upload);
     });
+    connect(ui->tBtnOpen, &QToolButton::clicked, this, &MainWindow::sltOpenRecvDir);
+
     ui->stackedWidget->setCurrentWidget(ui->page_upload);
+
+    player_ = new QMediaPlayer(this);
+    QAudioOutput* audioOutput = new QAudioOutput(this);
+    player_->setAudioOutput(audioOutput);
+
+    // connect(player_, &QMediaPlayer::playbackStateChanged, [=] (QMediaPlayer::PlaybackState state) {
+    //     if (state == QMediaPlayer::StoppedState) {
+    //         // 如果一首歌播放完毕，切换到下一首歌
+    //         emit ui->tBtnNextMusic->clicked();
+    //     }
+    // });
+
+    connect(player_, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
+        if (status == QMediaPlayer::EndOfMedia) {
+            emit ui->tBtnNextMusic->clicked();
+        }
+    });
+
+    static int index = 0;
+    timer_ = new QTimer(this);
+    timer_->setInterval(200);
+    connect(timer_, &QTimer::timeout, [&](){
+        ++index;
+        ui->dragSlider->setCurValue(index);
+        if (index == 100) {
+            timer_->stop();
+        }
+    });
+    timer_->start();
+}
+
+void MainWindow::playMusic(QListWidgetItem *item)
+{
+    MusicListWidget* widget = static_cast<MusicListWidget*>(ui->listWidgetMusicList->itemWidget(item));
+    QString fileName = widget->fileName();
+    player_->setSource(QUrl(getRecvDir() + fileName));
+    ui->tBtnPlayPause->setIcon(QIcon("://img/pause.png"));
+    ui->tBtnPlayPause->setText("暂停");
+    player_->play();
+}
+
+QString MainWindow::getRecvDir() const
+{
+    return QCoreApplication::applicationDirPath() + "/RecvFiles/";
 }
 
 void MainWindow::sltBtnMusicClicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page_music);
     // 打开Recv文件夹下的音频文件
-    QDir dir;
-    dir.setCurrent(QDir::currentPath() + "/RecvFiles/");
-    // qDebug() << dir.currentPath();
+    QDir dir(getRecvDir());
     QStringList entryList = dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
     for (int i = 0; i < entryList.size(); ++i) {
-        // qDebug() << entryList.at(i);
-        QString filePath = entryList.at(i);
-        QString suffix = filePath.right(filePath.size() - filePath.lastIndexOf('.') - 1);
-        qDebug() << suffix;
-        if (suffix == "flac" || suffix == "mp3" || suffix == "wav") {
-            QListWidgetItem* item = new QListWidgetItem;
-            ui->listWidgetMusicList->insertItem(0, item);
-            item->setSizeHint(QSize(ui->listWidgetMusicList->width(), 40));
-            MusicListWidget* widget = new MusicListWidget;
-            widget->setIcon("://img/interface/music-notes.png");
-            widget->setName(filePath);
-            ui->listWidgetMusicList->setItemWidget(item, widget);
+        if (!musicList_.contains(entryList.at(i))) {
+            QString filePath = entryList.at(i);
+            QString suffix = filePath.right(filePath.size() - filePath.lastIndexOf('.') - 1);
+            qDebug() << suffix;
+            if (suffix == "flac" || suffix == "mp3" || suffix == "wav") {
+                QListWidgetItem* item = new QListWidgetItem;
+                ui->listWidgetMusicList->insertItem(0, item);
+                item->setSizeHint(QSize(ui->listWidgetMusicList->width(), 40));
+                MusicListWidget* widget = new MusicListWidget;
+                widget->setIcon("://img/music.png");
+                widget->setName(filePath);
+                ui->listWidgetMusicList->setItemWidget(item, widget);
+                musicList_.append(filePath);
+            }
         }
     }
 }
 
-void MainWindow::sltOpenRecvDir(QString fileName)
+void MainWindow::sltOpenRecvDir(bool flag)
 {
-    QString path = QDir::currentPath();
-    path += "/RecvFiles/";
-    QUrl url(path);
-    QDesktopServices::openUrl(url);
+    Q_UNUSED(flag);
+    QDesktopServices::openUrl(QUrl(getRecvDir()));
 }
 
 void MainWindow::sltHandleRecvPiece(const FileMetaData &metaData)
@@ -130,21 +177,8 @@ void MainWindow::on_tBtnClose_clicked()
 // 双击ListWIdget中的项，如果是视频直接播放
 void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-    ui->stackedWidget->setCurrentWidget(ui->page_video);
-    DownloadItemWidget* widget = static_cast<DownloadItemWidget*>(ui->listWidget->itemWidget(item));
-    QString fileName = widget->fileName();
-    QString filePath = QDir::currentPath() + "/RecvFiles/" + fileName;
-    qDebug() << filePath;
-    if (!player_) {
-        player_ = new QMediaPlayer(this);
-    }
-    QAudioOutput* audio = new QAudioOutput(this);
-    player_->setAudioOutput(audio);
-    player_->setVideoOutput(ui->videoWidget);
-    player_->setSource(QUrl(filePath));
-    player_->play();
+    // playMusic(item);
 }
-
 
 void MainWindow::on_tBtnMin_clicked()
 {
@@ -157,6 +191,64 @@ void MainWindow::on_tBtnMax_clicked()
         this->showNormal();
     } else {
         this->showMaximized();
+    }
+}
+
+void MainWindow::on_listWidgetMusicList_itemDoubleClicked(QListWidgetItem *item)
+{
+    playMusic(item);
+}
+
+void MainWindow::on_tBtnPreMusic_clicked()
+{
+    int row = ui->listWidgetMusicList->currentRow();
+    qDebug() << "current row = " << row;
+    if (row == -1 || row == 0) {
+        return;
+    }
+    row = row - 1;
+    ui->listWidgetMusicList->setCurrentRow(row);
+    playMusic(ui->listWidgetMusicList->currentItem());
+}
+
+void MainWindow::on_tBtnPlayPause_clicked()
+{
+    if (player_->playbackState() == QMediaPlayer::PlayingState) {
+        ui->tBtnPlayPause->setIcon(QIcon("://img/play.png"));
+        ui->tBtnPlayPause->setText("播放");
+        player_->pause();
+    } else {
+        ui->tBtnPlayPause->setIcon(QIcon("://img/pause.png"));
+        ui->tBtnPlayPause->setText("暂停");
+        player_->play();
+    }
+}
+
+void MainWindow::on_tBtnNextMusic_clicked()
+{
+    int row = ui->listWidgetMusicList->currentRow();
+    // qDebug() << "current row = " << row;
+    if (row == -1 || row == ui->listWidgetMusicList->count() - 1) {
+        return;
+    }
+    row = row + 1;
+    ui->listWidgetMusicList->setCurrentRow(row);
+    playMusic(ui->listWidgetMusicList->currentItem());
+}
+
+
+void MainWindow::on_tBtnSearchMusic_clicked()
+{
+    QString searchName = ui->lineEditSearchMusic->text();
+    ui->lineEditSearchMusic->clear();
+    for (int i = 0; i < ui->listWidgetMusicList->count(); ++i) {
+        QListWidgetItem* item = ui->listWidgetMusicList->item(i);
+        MusicListWidget* widget = static_cast<MusicListWidget*>(ui->listWidgetMusicList->itemWidget(item));
+        QString fileName = widget->fileName();
+        if (fileName.contains(searchName)) {
+            ui->listWidgetMusicList->setCurrentRow(i);
+            return;
+        }
     }
 }
 

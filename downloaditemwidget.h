@@ -31,7 +31,7 @@ public:
     QString fileName() const;
 
 signals:
-    void sigBtnOpenDir(QString fileName);
+    void sigBtnOpenDir(bool flag);
 
 private slots:
     void sltShowPercent(quint8 percent);

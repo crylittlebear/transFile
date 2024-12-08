@@ -5,9 +5,12 @@
 
 DragSlider::DragSlider(QWidget *parent)
     : QWidget{parent}
-    , sliderColor_(0, 62, 91)
+    , sliderColor_(0, 144, 211)
     , sliderBlockColor_(255, 255, 255)
     , isDragging_(false)
+    , minValue_(0)
+    , maxValue_(100)
+    , curValue_(0)
 {
 
 }
@@ -35,6 +38,9 @@ void DragSlider::setMaxValue(quint64 value)
 void DragSlider::setCurValue(quint64 value)
 {
     curValue_ = value;
+    emit curValueChanged();
+    // 每次更新curValue的时候都需要重新绘制进度条
+    update();
 }
 
 quint64 DragSlider::curValue() const
@@ -70,10 +76,14 @@ void DragSlider::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    // 绘制圆角矩形拖动条
-    QRect rect(2 * sliderHeight_, 2 * sliderHeight_, sliderWidth_, sliderHeight_);
-    painter.setBrush(QBrush(sliderColor_));
-    painter.drawRoundedRect(rect, 5, 5);
+    // 绘制进度条前半部分
+    painter.setBrush(sliderColor_);
+    QRect rectFont(2 * sliderHeight_, 2 * sliderHeight_, curPos_.x() - 2 * sliderHeight_, sliderHeight_);
+    painter.drawRoundedRect(rectFont, 5, 5);
+    // 绘制进度条后半部分
+    painter.setBrush(Qt::white);
+    QRect rectBack(curPos_.x(), 2 * sliderHeight_, sliderWidth_ - (curPos_.x() - 2 * sliderHeight_), sliderHeight_);
+    painter.drawRoundedRect(rectBack, 5, 5);
     // 绘制拖动滑块
     QPen pen;
     pen.setWidth(2);
@@ -91,18 +101,33 @@ void DragSlider::resizeEvent(QResizeEvent *event)
 
     sliderHeight_ = widgetHeight / 5;
     sliderWidth_ = widgetWidth - 4 * sliderHeight_;
-    curPos_.setX(2 * sliderHeight_);
-    curPos_.setY(2 * sliderHeight_);
+    setCurValue(curValue_);
+    // curPos_.setX(2 * sliderHeight_);
+    // curPos_.setY(2 * sliderHeight_);
 
     // 触发重绘
-    update();
+    // update();
+    qDebug() << "sliderHeight = " << sliderHeight_;
+    qDebug() << "sliderWidth = " << sliderWidth_;
+    qDebug() << "curValue = " << curValue_;
     QWidget::resizeEvent(event);
 }
 
 void DragSlider::mousePressEvent(QMouseEvent *event)
 {
+    qDebug() << "mosue pressed";
+    qDebug() << "slider height = " << sliderHeight_;
+    qDebug() << "mouse pos x = " <<event->pos().x();
+    qDebug() << "curPos x = " << curPos_.x();
+    qDebug() << "mouse pos y = " <<event->pos().y();
+    qDebug() << "curPos y = " << curPos_.y();
+    if (inDragArea(event->pos())) {
+        qDebug() << "true";
+    } else {
+        qDebug() << "false";
+    }
     if (inDragArea(event->pos()) && (event->button() == Qt::LeftButton)) {
-        qDebug() << "click slider bolck!!!!!!!";
+        qDebug() << "slider block clicked!";
         isDragging_ = true;
     }
     QWidget::mousePressEvent(event);
@@ -111,7 +136,6 @@ void DragSlider::mousePressEvent(QMouseEvent *event)
 void DragSlider::mouseMoveEvent(QMouseEvent *event)
 {
     if (isDragging_ && (event->buttons() & Qt::LeftButton)) {
-        qDebug() << event->pos().x() << "left border = " << 2 * sliderHeight_;
         if (event->pos().x() > sliderWidth_ + 2 * sliderHeight_) {
             curPos_.setX(sliderWidth_ + 2 * sliderHeight_);
         } else if (event->pos().x() < 2 * sliderHeight_) {
@@ -119,7 +143,11 @@ void DragSlider::mouseMoveEvent(QMouseEvent *event)
         } else {
             curPos_.setX(event->pos().x());
         }
+        // emit sliderBlockMoved(event->pos().x());
+        qint32 moveDis = curPos_.x() - 2 * sliderHeight_;
+        curValue_ = (moveDis * maxValue_) / sliderWidth_;
         update();
+        qDebug() << "curValue = " << curValue_;
     }
     QWidget::mouseMoveEvent(event);
 }
@@ -132,4 +160,9 @@ void DragSlider::mouseReleaseEvent(QMouseEvent *event)
     QWidget::mouseReleaseEvent(event);
 }
 
+void DragSlider::curValueChanged()
+{
+    curPos_.setX(2 * sliderHeight_ + curValue_ * sliderWidth_ / maxValue_);
+    curPos_.setY(this->height() / 2);
+}
 
