@@ -145,3 +145,18 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     player_->play();
 }
 
+
+void MainWindow::on_tBtnMin_clicked()
+{
+    this->showMinimized();
+}
+
+void MainWindow::on_tBtnMax_clicked()
+{
+    if (this->isMaximized()) {
+        this->showNormal();
+    } else {
+        this->showMaximized();
+    }
+}
+

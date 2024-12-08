@@ -41,6 +41,10 @@ private slots:
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_tBtnMin_clicked();
+
+    void on_tBtnMax_clicked();
+
 private:
     Ui::MainWindow *ui;
 

@@ -19,6 +19,10 @@ DragWidget::DragWidget(QWidget *parent)
 DragWidget::~DragWidget()
 {}
 
+/*!
+ * @brief 设置可拖动区域的高度
+ * @param height 可拖动区域的高度值
+*/
 void DragWidget::setDragAreaHeight(int height)
 {
     dragHeight_ = height;
@@ -68,6 +72,7 @@ void DragWidget::mouseMoveEvent(QMouseEvent* event)
             }
             this->resize(tempWidth, tempHeight);
         } else if (isMoving_) {
+
             this->move(event->globalPosition().toPoint() - point_);
         }
     }
@@ -105,7 +110,8 @@ bool DragWidget::event(QEvent* event)
 
 bool DragWidget::isInDragArea(QPoint p)
 {
-    if ((p.x() >= SCALE_WIDTH) && (p.x() <= width() - SCALE_WIDTH) && (p.y() < DRAG_HEITH)) {
+    if ((p.x() >= dragHeight_) && (p.x() <= width() - dragHeight_)
+        && (p.y() < dragHeight_)) {
         return true;
     }
     return false;
@@ -118,7 +124,7 @@ bool DragWidget::isInScaleArea(QPoint p)
 
 bool DragWidget::isInLeftRightEdge(QPoint p)
 {
-    if (p.x() < SCALE_WIDTH || p.x() > this->width() - SCALE_WIDTH) {
+    if (p.x() < scaleDistance_ || p.x() > this->width() - scaleDistance_) {
         return true;
     }
     return false;
@@ -126,7 +132,7 @@ bool DragWidget::isInLeftRightEdge(QPoint p)
 
 bool DragWidget::isInTopBottomEdge(QPoint p)
 {
-    if (p.y() < SCALE_WIDTH || p.y() > this->height() - SCALE_WIDTH) {
+    if (p.y() < scaleDistance_ || p.y() > this->height() - scaleDistance_) {
         return true;
     }
     return false;
@@ -134,7 +140,8 @@ bool DragWidget::isInTopBottomEdge(QPoint p)
 
 bool DragWidget::isInCornerTopLeft(QPoint p)
 {
-    if (p.x() < SCALE_WIDTH && p.y() < SCALE_WIDTH || (p.x() > width() - SCALE_WIDTH) && (p.y() > height() - SCALE_WIDTH)) {
+    if (p.x() < scaleDistance_ && p.y() < scaleDistance_
+        || (p.x() > width() - scaleDistance_) && (p.y() > height() - scaleDistance_)) {
         return true;
     }
     return false;
@@ -142,7 +149,8 @@ bool DragWidget::isInCornerTopLeft(QPoint p)
 
 bool DragWidget::isInCornerTopRight(QPoint p)
 {
-    if ((p.x() > width() - SCALE_WIDTH) && (p.y() < SCALE_WIDTH) || (p.x() < SCALE_WIDTH) && (p.y() > height() - SCALE_WIDTH)) {
+    if ((p.x() > width() - scaleDistance_) && (p.y() < scaleDistance_)
+        || (p.x() < scaleDistance_) && (p.y() > height() - scaleDistance_)) {
         return true;
     }
     return false;

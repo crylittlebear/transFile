@@ -4,9 +4,6 @@
 
 #include <QMainWindow>
 
-#define SCALE_WIDTH 10
-#define DRAG_HEITH  32
-
 class DragWidget  : public QMainWindow
 {
     Q_OBJECT
