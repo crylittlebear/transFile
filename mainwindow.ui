@@ -836,6 +836,9 @@ QToolButton
                     <string notr="true"/>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
@@ -849,24 +852,29 @@ QToolButton
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QWidget" name="widget_7" native="true">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
+                     <widget class="QLabel" name="labelCurTime">
                       <property name="minimumSize">
                        <size>
-                        <width>50</width>
+                        <width>72</width>
                         <height>0</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
-                        <width>50</width>
+                        <width>72</width>
                         <height>16777215</height>
                        </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -892,42 +900,27 @@ QToolButton
                      </widget>
                     </item>
                     <item>
-                     <widget class="QWidget" name="widgetVolunm" native="true">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
+                     <widget class="QLabel" name="labelTotalTime">
                       <property name="minimumSize">
                        <size>
-                        <width>50</width>
+                        <width>72</width>
                         <height>0</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
-                        <width>50</width>
+                        <width>72</width>
                         <height>16777215</height>
                        </size>
                       </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_5">
-                       <property name="spacing">
-                        <number>0</number>
-                       </property>
-                       <property name="leftMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>0</number>
-                       </property>
-                      </layout>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
                      </widget>
                     </item>
                    </layout>
@@ -978,29 +971,7 @@ QToolButton
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QWidget" name="widget_8" native="true">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>50</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>50</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_3">
+                     <widget class="QLabel" name="labelNone">
                       <property name="minimumSize">
                        <size>
                         <width>72</width>
@@ -1014,7 +985,7 @@ QToolButton
                        </size>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -1034,7 +1005,7 @@ QToolButton
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_4">
                       <property name="spacing">
-                       <number>10</number>
+                       <number>20</number>
                       </property>
                       <item>
                        <widget class="QToolButton" name="tBtnPreMusic">
@@ -1222,28 +1193,6 @@ QToolButton
                       </property>
                       <property name="autoRaise">
                        <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QWidget" name="widget_9" native="true">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>50</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>50</width>
-                        <height>16777215</height>
-                       </size>
                       </property>
                      </widget>
                     </item>

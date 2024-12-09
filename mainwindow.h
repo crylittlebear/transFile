@@ -75,5 +75,6 @@ private:
     QTimer* timer_;
 
     quint32 musicSecondIndex_;
+    quint32 curMusicSecondLength_;
 };
 #endif // MAINWINDOW_H

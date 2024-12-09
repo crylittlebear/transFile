@@ -83,6 +83,12 @@ void MainWindow::initConnections()
 
     connect(timer_, &QTimer::timeout, [&](){
         ui->dragSlider->setCurValue(++musicSecondIndex_);
+        int curSecond = musicSecondIndex_ % 60;
+        int curMinute = musicSecondIndex_ / 60;
+        int totalSecond = curMusicSecondLength_ % 60;
+        int totalMinute = curMusicSecondLength_ / 60;
+        ui->labelCurTime->setText(QString("%1:%2").arg(curMinute).arg(curSecond));
+        ui->labelTotalTime->setText(QString("%1:%2").arg(totalMinute).arg(totalSecond));
     });
 
     // 如果歌曲播放到末尾切换下一曲
@@ -104,6 +110,7 @@ void MainWindow::initConnections()
         }
         musicSecondIndex_ = 0;
         quint64 seconds = duration / 1000;
+        curMusicSecondLength_ = seconds;
         ui->dragSlider->setMaxValue(seconds);
         ui->dragSlider->setCurValue(0);
     });
