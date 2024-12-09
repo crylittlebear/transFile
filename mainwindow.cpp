@@ -15,7 +15,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    init();
+    // 设置窗口显示属性
+    setWindowFlag(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowIcon(QIcon(":/img/cloud.png"));
+    setWindowTitle("服务器");
+
+    // 隐藏滑动条
+    ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->listWidgetMusicList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->listWidgetMusicList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    initMembers();
+
+    initConnections();
+
+    ui->stackedWidget->setCurrentWidget(ui->page_upload);
 }
 
 MainWindow::~MainWindow()
@@ -23,20 +38,25 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::init()
+void MainWindow::initMembers()
 {
-    setWindowFlag(Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground);
-    setWindowIcon(QIcon(":/img/cloud.png"));
-    setWindowTitle("服务器");
-    ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->listWidgetMusicList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->listWidgetMusicList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // 初始化服务器相关参数
     server_ = new QTcpServer(this);
-
     quint16 port = 8086;
     server_->listen(QHostAddress::Any, port);
 
+    // 初始化定时器及相关参数
+    timer_ = new QTimer(this);
+    timer_->setInterval(1000);
+
+    // 初始化播放器及相关参数
+    player_ = new QMediaPlayer(this);
+    QAudioOutput* audioOutput = new QAudioOutput(this);
+    player_->setAudioOutput(audioOutput);
+}
+
+void MainWindow::initConnections()
+{
     connect(server_, &QTcpServer::newConnection, this, [=](){
         QTcpSocket* socket = server_->nextPendingConnection();
         if (!socket->isValid()) {
@@ -49,54 +69,57 @@ void MainWindow::init()
     });
 
     connect(ui->tBtnMusic, &QToolButton::clicked, this, &MainWindow::sltBtnMusicClicked);
+
     connect(ui->tBtnVideo, &QToolButton::clicked, [=]() {
         ui->stackedWidget->setCurrentWidget(ui->page_video);
     });
+
     connect(ui->tBtnUpload, &QToolButton::clicked, [=]() {
         ui->stackedWidget->setCurrentWidget(ui->page_upload);
     });
+
     connect(ui->tBtnOpen, &QToolButton::clicked, this, &MainWindow::sltOpenRecvDir);
 
-    ui->stackedWidget->setCurrentWidget(ui->page_upload);
 
-    player_ = new QMediaPlayer(this);
-    QAudioOutput* audioOutput = new QAudioOutput(this);
-    player_->setAudioOutput(audioOutput);
+    connect(timer_, &QTimer::timeout, [&](){
+        ui->dragSlider->setCurValue(++musicSecondIndex_);
+    });
 
-    // connect(player_, &QMediaPlayer::playbackStateChanged, [=] (QMediaPlayer::PlaybackState state) {
-    //     if (state == QMediaPlayer::StoppedState) {
-    //         // 如果一首歌播放完毕，切换到下一首歌
-    //         emit ui->tBtnNextMusic->clicked();
-    //     }
-    // });
-
+    // 如果歌曲播放到末尾切换下一曲
     connect(player_, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
         if (status == QMediaPlayer::EndOfMedia) {
             emit ui->tBtnNextMusic->clicked();
         }
     });
 
-    static int index = 0;
-    timer_ = new QTimer(this);
-    timer_->setInterval(200);
-    connect(timer_, &QTimer::timeout, [&](){
-        ++index;
-        ui->dragSlider->setCurValue(index);
-        if (index == 100) {
-            timer_->stop();
+    connect(player_, &QMediaPlayer::durationChanged, [=](quint64 duration){
+        /*!
+         * 调用setSource()后，QMediaPlayer的内部状态开始切换到加载新媒体文件的流程。
+         * 在新媒体文件完全解析完成之前，duration的初始值是 0，
+         * 所以durationChanged信号会先触发一次，告诉你当前时长为 0。
+         * 需要过滤掉未解析完成时候的触发
+        */
+        if (duration == 0) {
+            return;
         }
+        musicSecondIndex_ = 0;
+        quint64 seconds = duration / 1000;
+        ui->dragSlider->setMaxValue(seconds);
+        ui->dragSlider->setCurValue(0);
     });
-    timer_->start();
 }
 
 void MainWindow::playMusic(QListWidgetItem *item)
 {
     MusicListWidget* widget = static_cast<MusicListWidget*>(ui->listWidgetMusicList->itemWidget(item));
     QString fileName = widget->fileName();
-    player_->setSource(QUrl(getRecvDir() + fileName));
-    ui->tBtnPlayPause->setIcon(QIcon("://img/pause.png"));
+    player_->setSource(QUrl::fromLocalFile(getRecvDir() + fileName));
+    qDebug() << getRecvDir() + fileName;
+    ui->tBtnPlayPause->setIcon(QIcon("://img/musicIcon/stop.png"));
     ui->tBtnPlayPause->setText("暂停");
+    timer_->stop();
     player_->play();
+    timer_->start();
 }
 
 QString MainWindow::getRecvDir() const
@@ -161,10 +184,9 @@ void MainWindow::sltHandleRecvPiece(const FileMetaData &metaData)
     if (metaData.offset + metaData.dataSize == metaData.totalSize) {
         widget->setToolButtonEnable();
     }
-
     /**
-     *  像下面这样就不可以，这样会导致每收到一个一段来自客户端的数据就连接一次，那么当打开文件夹的时候就会出现
-     *  一次性弹出好多个文件夹窗口
+     *  像下面这样就不可以，这样会导致每收到一个一段来自客户端的数据就连接一次，那么当打开文件夹的时候
+     *  就会出现一次性弹出好多个文件夹窗口
     */
     // connect(widget, &DownloadItemWidget::sigBtnOpenDir, this, &MainWindow::sltOpenRecvDir);
 }
@@ -214,11 +236,11 @@ void MainWindow::on_tBtnPreMusic_clicked()
 void MainWindow::on_tBtnPlayPause_clicked()
 {
     if (player_->playbackState() == QMediaPlayer::PlayingState) {
-        ui->tBtnPlayPause->setIcon(QIcon("://img/play.png"));
+        ui->tBtnPlayPause->setIcon(QIcon("://img/musicIcon/play.png"));
         ui->tBtnPlayPause->setText("播放");
         player_->pause();
     } else {
-        ui->tBtnPlayPause->setIcon(QIcon("://img/pause.png"));
+        ui->tBtnPlayPause->setIcon(QIcon("://img/musicIcon/stop.png"));
         ui->tBtnPlayPause->setText("暂停");
         player_->play();
     }
@@ -236,7 +258,6 @@ void MainWindow::on_tBtnNextMusic_clicked()
     playMusic(ui->listWidgetMusicList->currentItem());
 }
 
-
 void MainWindow::on_tBtnSearchMusic_clicked()
 {
     QString searchName = ui->lineEditSearchMusic->text();
@@ -250,5 +271,18 @@ void MainWindow::on_tBtnSearchMusic_clicked()
             return;
         }
     }
+}
+
+void MainWindow::on_tBtnVolumn_clicked()
+{
+    QAudioOutput* outPut = player_->audioOutput();
+    if (outPut->isMuted()) {
+        ui->tBtnVolumn->setIcon(QIcon("://img/musicIcon/volume.png"));
+        outPut->setMuted(false);
+    }else {
+        ui->tBtnVolumn->setIcon(QIcon("://img/musicIcon/mute.png"));
+        outPut->setMuted(true);
+    }
+    player_->setAudioOutput(outPut);
 }
 

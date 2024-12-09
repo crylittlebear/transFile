@@ -39,6 +39,7 @@ void DragSlider::setCurValue(quint64 value)
 {
     curValue_ = value;
     emit curValueChanged();
+
     // 每次更新curValue的时候都需要重新绘制进度条
     update();
 }
@@ -105,8 +106,6 @@ void DragSlider::resizeEvent(QResizeEvent *event)
     // curPos_.setX(2 * sliderHeight_);
     // curPos_.setY(2 * sliderHeight_);
 
-    // 触发重绘
-    // update();
     qDebug() << "sliderHeight = " << sliderHeight_;
     qDebug() << "sliderWidth = " << sliderWidth_;
     qDebug() << "curValue = " << curValue_;
@@ -115,19 +114,19 @@ void DragSlider::resizeEvent(QResizeEvent *event)
 
 void DragSlider::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "mosue pressed";
-    qDebug() << "slider height = " << sliderHeight_;
-    qDebug() << "mouse pos x = " <<event->pos().x();
-    qDebug() << "curPos x = " << curPos_.x();
-    qDebug() << "mouse pos y = " <<event->pos().y();
-    qDebug() << "curPos y = " << curPos_.y();
-    if (inDragArea(event->pos())) {
-        qDebug() << "true";
-    } else {
-        qDebug() << "false";
-    }
+    // qDebug() << "mosue pressed";
+    // qDebug() << "slider height = " << sliderHeight_;
+    // qDebug() << "mouse pos x = " <<event->pos().x();
+    // qDebug() << "curPos x = " << curPos_.x();
+    // qDebug() << "mouse pos y = " <<event->pos().y();
+    // qDebug() << "curPos y = " << curPos_.y();
+    // if (inDragArea(event->pos())) {
+    //     qDebug() << "true";
+    // } else {
+    //     qDebug() << "false";
+    // }
     if (inDragArea(event->pos()) && (event->button() == Qt::LeftButton)) {
-        qDebug() << "slider block clicked!";
+        // qDebug() << "slider block clicked!";
         isDragging_ = true;
     }
     QWidget::mousePressEvent(event);

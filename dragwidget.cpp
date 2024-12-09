@@ -124,7 +124,10 @@ bool DragWidget::isInScaleArea(QPoint p)
 
 bool DragWidget::isInLeftRightEdge(QPoint p)
 {
-    if (p.x() < scaleDistance_ || p.x() > this->width() - scaleDistance_) {
+    // if (p.x() < scaleDistance_ || p.x() > this->width() - scaleDistance_) {
+    //     return true;
+    // }
+    if (p.x() > this->width() - scaleDistance_) {
         return true;
     }
     return false;
@@ -132,7 +135,10 @@ bool DragWidget::isInLeftRightEdge(QPoint p)
 
 bool DragWidget::isInTopBottomEdge(QPoint p)
 {
-    if (p.y() < scaleDistance_ || p.y() > this->height() - scaleDistance_) {
+    // if (p.y() < scaleDistance_ || p.y() > this->height() - scaleDistance_) {
+    //     return true;
+    // }
+    if (p.y() > this->height() - scaleDistance_) {
         return true;
     }
     return false;
@@ -140,8 +146,11 @@ bool DragWidget::isInTopBottomEdge(QPoint p)
 
 bool DragWidget::isInCornerTopLeft(QPoint p)
 {
-    if (p.x() < scaleDistance_ && p.y() < scaleDistance_
-        || (p.x() > width() - scaleDistance_) && (p.y() > height() - scaleDistance_)) {
+    // if (p.x() < scaleDistance_ && p.y() < scaleDistance_
+    //     || (p.x() > width() - scaleDistance_) && (p.y() > height() - scaleDistance_)) {
+    //     return true;
+    // }
+    if ((p.x() > width() - scaleDistance_) && (p.y() > height() - scaleDistance_)) {
         return true;
     }
     return false;

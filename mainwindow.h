@@ -28,7 +28,9 @@ public:
     ~MainWindow();
 
 private:
-    void init();
+    void initMembers();
+
+    void initConnections();
 
     void playMusic(QListWidgetItem* item);
 
@@ -59,6 +61,8 @@ private slots:
 
     void on_tBtnSearchMusic_clicked();
 
+    void on_tBtnVolumn_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -69,5 +73,7 @@ private:
     QStringList musicList_;
 
     QTimer* timer_;
+
+    quint32 musicSecondIndex_;
 };
 #endif // MAINWINDOW_H
