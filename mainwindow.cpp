@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QAudioOutput>
+#include <QRandomGenerator>
 
 #include "downloaditemwidget.h"
 #include "dragslider.h"
@@ -31,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     initConnections();
 
     ui->stackedWidget->setCurrentWidget(ui->page_upload);
+
+    ui->lineEditSearchMusic->hide();
 }
 
 MainWindow::~MainWindow()
@@ -53,6 +56,11 @@ void MainWindow::initMembers()
     player_ = new QMediaPlayer(this);
     QAudioOutput* audioOutput = new QAudioOutput(this);
     player_->setAudioOutput(audioOutput);
+
+    // 初始化背景图片列表
+    QString backDir = QCoreApplication::applicationDirPath() + "/background/";
+    QDir dir(backDir);
+    backgroundList_ = dir.entryList(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 }
 
 void MainWindow::initConnections()
@@ -71,10 +79,12 @@ void MainWindow::initConnections()
     connect(ui->tBtnMusic, &QToolButton::clicked, this, &MainWindow::sltBtnMusicClicked);
 
     connect(ui->tBtnVideo, &QToolButton::clicked, [=]() {
+        setToolButtonEnable(ui->tBtnVideo);
         ui->stackedWidget->setCurrentWidget(ui->page_video);
     });
 
     connect(ui->tBtnUpload, &QToolButton::clicked, [=]() {
+        setToolButtonEnable(ui->tBtnUpload);
         ui->stackedWidget->setCurrentWidget(ui->page_upload);
     });
 
@@ -118,6 +128,12 @@ void MainWindow::initConnections()
 
 void MainWindow::playMusic(QListWidgetItem *item)
 {
+    // 切换背景图片
+    quint16 backIndex = QRandomGenerator::global()->bounded(0, backgroundList_.size());
+    QString filePath = QCoreApplication::applicationDirPath() + "/background/" + backgroundList_.at(backIndex);
+    qDebug() << "back file path = " << filePath;
+    ui->labelPic->setBackPath(filePath);
+
     MusicListWidget* widget = static_cast<MusicListWidget*>(ui->listWidgetMusicList->itemWidget(item));
     QString fileName = widget->fileName();
     player_->setSource(QUrl::fromLocalFile(getRecvDir() + fileName));
@@ -134,9 +150,22 @@ QString MainWindow::getRecvDir() const
     return QCoreApplication::applicationDirPath() + "/RecvFiles/";
 }
 
+void MainWindow::setToolButtonEnable(QToolButton *btn)
+{
+    btn->setStyleSheet("background-color: rgb(0, 62, 91); color: white;");
+    QVector<QToolButton*> list;
+    list << ui->tBtnFile << ui->tBtnConfig << ui->tBtnMusic << ui->tBtnVideo << ui->tBtnUpload << ui->tBtnLogin << ui->tBtnOpen;
+    for (int i = 0; i < list.size(); ++i) {
+        if (list.at(i) != btn) {
+            list[i]->setStyleSheet("");
+        }
+    }
+}
+
 void MainWindow::sltBtnMusicClicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page_music);
+    setToolButtonEnable(ui->tBtnMusic);
     // 打开Recv文件夹下的音频文件
     QDir dir(getRecvDir());
     QStringList entryList = dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
@@ -144,7 +173,7 @@ void MainWindow::sltBtnMusicClicked()
         if (!musicList_.contains(entryList.at(i))) {
             QString filePath = entryList.at(i);
             QString suffix = filePath.right(filePath.size() - filePath.lastIndexOf('.') - 1);
-            qDebug() << suffix;
+            // qDebug() << suffix;
             if (suffix == "flac" || suffix == "mp3" || suffix == "wav") {
                 QListWidgetItem* item = new QListWidgetItem;
                 ui->listWidgetMusicList->insertItem(0, item);
@@ -246,10 +275,12 @@ void MainWindow::on_tBtnPlayPause_clicked()
         ui->tBtnPlayPause->setIcon(QIcon("://img/musicIcon/play.png"));
         ui->tBtnPlayPause->setText("播放");
         player_->pause();
+        timer_->stop();
     } else {
         ui->tBtnPlayPause->setIcon(QIcon("://img/musicIcon/stop.png"));
         ui->tBtnPlayPause->setText("暂停");
         player_->play();
+        timer_->start();
     }
 }
 
@@ -267,6 +298,7 @@ void MainWindow::on_tBtnNextMusic_clicked()
 
 void MainWindow::on_tBtnSearchMusic_clicked()
 {
+    ui->lineEditSearchMusic->show();
     QString searchName = ui->lineEditSearchMusic->text();
     ui->lineEditSearchMusic->clear();
     for (int i = 0; i < ui->listWidgetMusicList->count(); ++i) {
@@ -284,7 +316,7 @@ void MainWindow::on_tBtnVolumn_clicked()
 {
     QAudioOutput* outPut = player_->audioOutput();
     if (outPut->isMuted()) {
-        ui->tBtnVolumn->setIcon(QIcon("://img/musicIcon/volume.png"));
+        ui->tBtnVolumn->setIcon(QIcon("://img/musicIcon/audio.png"));
         outPut->setMuted(false);
     }else {
         ui->tBtnVolumn->setIcon(QIcon("://img/musicIcon/mute.png"));

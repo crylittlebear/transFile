@@ -46,11 +46,14 @@
         <file>img/interface/upload.png</file>
         <file>img/interface/upload-file.png</file>
         <file>img/interface/video.png</file>
+        <file>img/musicIcon/album.png</file>
+        <file>img/musicIcon/arrow.png</file>
+        <file>img/musicIcon/audio.png</file>
+        <file>img/musicIcon/cycle.png</file>
+        <file>img/musicIcon/engine.png</file>
+        <file>img/musicIcon/favorite.png</file>
+        <file>img/musicIcon/info.png</file>
         <file>img/musicIcon/mute.png</file>
-        <file>img/musicIcon/volume.png</file>
-        <file>img/musicIcon/reload.png</file>
-        <file>img/musicIcon/repeat.png</file>
-        <file>img/musicIcon/repeat-once.png</file>
         <file>img/musicIcon/shuffle.png</file>
     </qresource>
 </RCC>

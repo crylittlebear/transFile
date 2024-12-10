@@ -33,6 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         musiclistwidget.h musiclistwidget.cpp musiclistwidget.ui
         dragslider.h dragslider.cpp
         res.qrc
+        backlabel.h backlabel.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

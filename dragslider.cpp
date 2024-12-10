@@ -106,9 +106,9 @@ void DragSlider::resizeEvent(QResizeEvent *event)
     // curPos_.setX(2 * sliderHeight_);
     // curPos_.setY(2 * sliderHeight_);
 
-    qDebug() << "sliderHeight = " << sliderHeight_;
-    qDebug() << "sliderWidth = " << sliderWidth_;
-    qDebug() << "curValue = " << curValue_;
+    // qDebug() << "sliderHeight = " << sliderHeight_;
+    // qDebug() << "sliderWidth = " << sliderWidth_;
+    // qDebug() << "curValue = " << curValue_;
     QWidget::resizeEvent(event);
 }
 

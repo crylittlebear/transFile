@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>789</width>
-    <height>547</height>
+    <width>878</width>
+    <height>585</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -667,7 +667,7 @@ QToolButton
               </spacer>
              </item>
              <item>
-              <widget class="QToolButton" name="tBtnVideo_3">
+              <widget class="QToolButton" name="tBtnLogin">
                <property name="minimumSize">
                 <size>
                  <width>70</width>
@@ -773,16 +773,16 @@ QToolButton
                <number>3</number>
               </property>
               <property name="leftMargin">
-               <number>2</number>
+               <number>5</number>
               </property>
               <property name="topMargin">
-               <number>2</number>
+               <number>5</number>
               </property>
               <property name="rightMargin">
-               <number>2</number>
+               <number>5</number>
               </property>
               <property name="bottomMargin">
-               <number>2</number>
+               <number>5</number>
               </property>
               <item>
                <widget class="QWidget" name="widgetMusicDisplay" native="true">
@@ -791,19 +791,19 @@ QToolButton
                   <number>0</number>
                  </property>
                  <property name="leftMargin">
-                  <number>0</number>
+                  <number>2</number>
                  </property>
                  <property name="topMargin">
-                  <number>0</number>
+                  <number>2</number>
                  </property>
                  <property name="rightMargin">
-                  <number>0</number>
+                  <number>2</number>
                  </property>
                  <property name="bottomMargin">
                   <number>5</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="label">
+                  <widget class="BackLabel" name="labelPic">
                    <property name="styleSheet">
                     <string notr="true">background-color: black;</string>
                    </property>
@@ -937,13 +937,13 @@ QToolButton
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>36</height>
+                     <height>42</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
-                     <height>36</height>
+                     <height>42</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1005,20 +1005,20 @@ QToolButton
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_4">
                       <property name="spacing">
-                       <number>20</number>
+                       <number>15</number>
                       </property>
                       <item>
                        <widget class="QToolButton" name="tBtnPreMusic">
                         <property name="minimumSize">
                          <size>
-                          <width>32</width>
-                          <height>32</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>32</width>
-                          <height>32</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="text">
@@ -1030,8 +1030,8 @@ QToolButton
                         </property>
                         <property name="iconSize">
                          <size>
-                          <width>30</width>
-                          <height>30</height>
+                          <width>36</width>
+                          <height>36</height>
                          </size>
                         </property>
                         <property name="toolButtonStyle">
@@ -1043,14 +1043,14 @@ QToolButton
                        <widget class="QToolButton" name="tBtnPlayPause">
                         <property name="minimumSize">
                          <size>
-                          <width>32</width>
-                          <height>32</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>32</width>
-                          <height>32</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="text">
@@ -1062,8 +1062,8 @@ QToolButton
                         </property>
                         <property name="iconSize">
                          <size>
-                          <width>30</width>
-                          <height>30</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="toolButtonStyle">
@@ -1075,14 +1075,14 @@ QToolButton
                        <widget class="QToolButton" name="tBtnNextMusic">
                         <property name="minimumSize">
                          <size>
-                          <width>32</width>
-                          <height>32</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>32</width>
-                          <height>32</height>
+                          <width>42</width>
+                          <height>42</height>
                          </size>
                         </property>
                         <property name="text">
@@ -1094,8 +1094,8 @@ QToolButton
                         </property>
                         <property name="iconSize">
                          <size>
-                          <width>30</width>
-                          <height>30</height>
+                          <width>36</width>
+                          <height>36</height>
                          </size>
                         </property>
                         <property name="toolButtonStyle">
@@ -1119,7 +1119,7 @@ QToolButton
                      </spacer>
                     </item>
                     <item>
-                     <widget class="QToolButton" name="toolButton_3">
+                     <widget class="QToolButton" name="tBtnPlayMode">
                       <property name="minimumSize">
                        <size>
                         <width>36</width>
@@ -1144,12 +1144,12 @@ QToolButton
                       </property>
                       <property name="icon">
                        <iconset resource="res.qrc">
-                        <normaloff>:/img/musicIcon/repeat-once.png</normaloff>:/img/musicIcon/repeat-once.png</iconset>
+                        <normaloff>:/img/musicIcon/cycle.png</normaloff>:/img/musicIcon/cycle.png</iconset>
                       </property>
                       <property name="iconSize">
                        <size>
-                        <width>22</width>
-                        <height>22</height>
+                        <width>26</width>
+                        <height>26</height>
                        </size>
                       </property>
                       <property name="autoRaise">
@@ -1183,12 +1183,12 @@ QToolButton
                       </property>
                       <property name="icon">
                        <iconset resource="res.qrc">
-                        <normaloff>:/img/musicIcon/volume.png</normaloff>:/img/musicIcon/volume.png</iconset>
+                        <normaloff>:/img/musicIcon/audio.png</normaloff>:/img/musicIcon/audio.png</iconset>
                       </property>
                       <property name="iconSize">
                        <size>
-                        <width>24</width>
-                        <height>24</height>
+                        <width>26</width>
+                        <height>26</height>
                        </size>
                       </property>
                       <property name="autoRaise">
@@ -1205,10 +1205,10 @@ QToolButton
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_7">
                 <property name="spacing">
-                 <number>0</number>
+                 <number>7</number>
                 </property>
                 <property name="bottomMargin">
-                 <number>0</number>
+                 <number>7</number>
                 </property>
                 <item>
                  <widget class="QListWidget" name="listWidgetMusicList">
@@ -1243,78 +1243,229 @@ QToolButton
                   <property name="minimumSize">
                    <size>
                     <width>200</width>
-                    <height>66</height>
+                    <height>70</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>200</width>
-                    <height>66</height>
+                    <height>70</height>
                    </size>
                   </property>
-                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                  <property name="styleSheet">
+                   <string notr="true">QWidget#widgetMusicSearch
+{
+	border-radius: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+}</string>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
                    <property name="leftMargin">
-                    <number>10</number>
+                    <number>5</number>
                    </property>
                    <property name="topMargin">
-                    <number>1</number>
+                    <number>5</number>
                    </property>
                    <property name="rightMargin">
-                    <number>10</number>
+                    <number>5</number>
                    </property>
                    <property name="bottomMargin">
-                    <number>1</number>
+                    <number>5</number>
                    </property>
                    <item>
-                    <widget class="QLineEdit" name="lineEditSearchMusic">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>25</height>
-                      </size>
+                    <widget class="QWidget" name="widget_5" native="true">
+                     <layout class="QHBoxLayout" name="horizontalLayout_6">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QToolButton" name="tBtnImport">
+                        <property name="minimumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="res.qrc">
+                          <normaloff>:/img/musicIcon/album.png</normaloff>:/img/musicIcon/album.png</iconset>
+                        </property>
+                        <property name="iconSize">
+                         <size>
+                          <width>30</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolButtonStyle">
+                         <enum>Qt::ToolButtonIconOnly</enum>
+                        </property>
+                        <property name="autoRaise">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QToolButton" name="tBtnLove">
+                        <property name="minimumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="res.qrc">
+                          <normaloff>:/img/musicIcon/love.png</normaloff>:/img/musicIcon/love.png</iconset>
+                        </property>
+                        <property name="iconSize">
+                         <size>
+                          <width>30</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolButtonStyle">
+                         <enum>Qt::ToolButtonIconOnly</enum>
+                        </property>
+                        <property name="autoRaise">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QToolButton" name="tBtnFileInfo">
+                        <property name="minimumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="res.qrc">
+                          <normaloff>:/img/musicIcon/info.png</normaloff>:/img/musicIcon/info.png</iconset>
+                        </property>
+                        <property name="iconSize">
+                         <size>
+                          <width>30</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolButtonStyle">
+                         <enum>Qt::ToolButtonIconOnly</enum>
+                        </property>
+                        <property name="autoRaise">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QToolButton" name="tBtnSearchMusic">
+                        <property name="minimumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="res.qrc">
+                          <normaloff>:/img/musicIcon/engine.png</normaloff>:/img/musicIcon/engine.png</iconset>
+                        </property>
+                        <property name="iconSize">
+                         <size>
+                          <width>30</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolButtonStyle">
+                         <enum>Qt::ToolButtonIconOnly</enum>
+                        </property>
+                        <property name="autoRaise">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_5">
+                     <property name="leftMargin">
+                      <number>10</number>
                      </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLineEdit#lineEditSearchMusic
+                     <property name="rightMargin">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLineEdit" name="lineEditSearchMusic">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QLineEdit#lineEditSearchMusic
 {
 	border-radius: 5px;
 	border-style: solid;
 	border-width: 1px;
 	border-color: gray;
 }</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QToolButton" name="tBtnSearchMusic">
-                     <property name="minimumSize">
-                      <size>
-                       <width>28</width>
-                       <height>28</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">border-radius: 5px;</string>
-                     </property>
-                     <property name="text">
-                      <string>...</string>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="res.qrc">
-                       <normaloff>:/img/interface/searching.png</normaloff>:/img/interface/searching.png</iconset>
-                     </property>
-                     <property name="iconSize">
-                      <size>
-                       <width>20</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="autoRaise">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </widget>
@@ -1346,6 +1497,11 @@ QToolButton
    <extends>QWidget</extends>
    <header location="global">dragslider.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BackLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">backlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

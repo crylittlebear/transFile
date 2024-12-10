@@ -8,6 +8,7 @@
 #include <QMediaPlayer>
 #include <QListWidgetItem>
 #include <QTimer>
+#include <QToolButton>
 
 #include "dragwidget.h"
 #include "serverthread.h"
@@ -35,6 +36,8 @@ private:
     void playMusic(QListWidgetItem* item);
 
     QString getRecvDir() const;
+
+    void setToolButtonEnable(QToolButton* btn);
 
 private slots:
     void sltBtnMusicClicked();
@@ -71,6 +74,8 @@ private:
     QMediaPlayer* player_ = nullptr;
 
     QStringList musicList_;
+
+    QStringList backgroundList_;
 
     QTimer* timer_;
 
