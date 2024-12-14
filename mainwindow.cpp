@@ -77,19 +77,10 @@ void MainWindow::initConnections()
     });
 
     connect(ui->tBtnMusic, &QToolButton::clicked, this, &MainWindow::sltBtnMusicClicked);
-
-    connect(ui->tBtnVideo, &QToolButton::clicked, [=]() {
-        setToolButtonEnable(ui->tBtnVideo);
-        ui->stackedWidget->setCurrentWidget(ui->page_video);
-    });
-
-    connect(ui->tBtnUpload, &QToolButton::clicked, [=]() {
-        setToolButtonEnable(ui->tBtnUpload);
-        ui->stackedWidget->setCurrentWidget(ui->page_upload);
-    });
-
-    connect(ui->tBtnOpen, &QToolButton::clicked, this, &MainWindow::sltOpenRecvDir);
-
+    connect(ui->tBtnFile, &QToolButton::clicked, this, &MainWindow::sltBtnFileClicked);
+    connect(ui->tBtnTransfer, &QToolButton::clicked, this, &MainWindow::sltBtnTransferClicked);
+    connect(ui->tBtnVideo, &QToolButton::clicked, this, &MainWindow::sltBtnVideoClicked);
+    connect(ui->tBtnLogout, &QToolButton::clicked, this, &MainWindow::sltBtnLogoutClicked);
 
     connect(timer_, &QTimer::timeout, [&](){
         ui->dragSlider->setCurValue(++musicSecondIndex_);
@@ -128,12 +119,15 @@ void MainWindow::initConnections()
 
 void MainWindow::playMusic(QListWidgetItem *item)
 {
+    // 记录当前播放的音乐条目
+    curPlayItem_ = item;
     // 切换背景图片
-    quint16 backIndex = QRandomGenerator::global()->bounded(0, backgroundList_.size());
-    QString filePath = QCoreApplication::applicationDirPath() + "/background/" + backgroundList_.at(backIndex);
-    qDebug() << "back file path = " << filePath;
-    ui->labelPic->setBackPath(filePath);
-
+    if (backgroundList_.size() > 0) {
+        quint16 backIndex = QRandomGenerator::global()->bounded(0, backgroundList_.size());
+        QString filePath = QCoreApplication::applicationDirPath() + "/background/" + backgroundList_.at(backIndex);
+        qDebug() << "back file path = " << filePath;
+        ui->labelPic->setBackPath(filePath);
+    }
     MusicListWidget* widget = static_cast<MusicListWidget*>(ui->listWidgetMusicList->itemWidget(item));
     QString fileName = widget->fileName();
     player_->setSource(QUrl::fromLocalFile(getRecvDir() + fileName));
@@ -154,12 +148,24 @@ void MainWindow::setToolButtonEnable(QToolButton *btn)
 {
     btn->setStyleSheet("background-color: rgb(0, 62, 91); color: white;");
     QVector<QToolButton*> list;
-    list << ui->tBtnFile << ui->tBtnConfig << ui->tBtnMusic << ui->tBtnVideo << ui->tBtnUpload << ui->tBtnLogin << ui->tBtnOpen;
+    list << ui->tBtnFile << ui->tBtnFile << ui->tBtnMusic << ui->tBtnVideo << ui->tBtnTransfer << ui->tBtnLogout;
     for (int i = 0; i < list.size(); ++i) {
         if (list.at(i) != btn) {
             list[i]->setStyleSheet("");
         }
     }
+}
+
+void MainWindow::sltBtnFileClicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_file);
+    setToolButtonEnable(ui->tBtnFile);
+}
+
+void MainWindow::sltBtnTransferClicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_transfer);
+    setToolButtonEnable(ui->tBtnTransfer);
 }
 
 void MainWindow::sltBtnMusicClicked()
@@ -186,6 +192,17 @@ void MainWindow::sltBtnMusicClicked()
             }
         }
     }
+}
+
+void MainWindow::sltBtnVideoClicked()
+{
+    setToolButtonEnable(ui->tBtnVideo);
+    ui->stackedWidget->setCurrentWidget(ui->page_video);
+}
+
+void MainWindow::sltBtnLogoutClicked()
+{
+    emit sigLogout();
 }
 
 void MainWindow::sltOpenRecvDir(bool flag)
@@ -286,7 +303,7 @@ void MainWindow::on_tBtnPlayPause_clicked()
 
 void MainWindow::on_tBtnNextMusic_clicked()
 {
-    int row = ui->listWidgetMusicList->currentRow();
+    int row = ui->listWidgetMusicList->row(curPlayItem_);
     // qDebug() << "current row = " << row;
     if (row == -1 || row == ui->listWidgetMusicList->count() - 1) {
         return;

@@ -28,6 +28,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void sigLogout();
+
 private:
     void initMembers();
 
@@ -40,7 +43,15 @@ private:
     void setToolButtonEnable(QToolButton* btn);
 
 private slots:
+    void sltBtnFileClicked();
+
+    void sltBtnTransferClicked();
+
     void sltBtnMusicClicked();
+
+    void sltBtnVideoClicked();
+
+    void sltBtnLogoutClicked();
 
     void sltOpenRecvDir(bool flag);
 
@@ -71,15 +82,19 @@ private:
 
     QTcpServer* server_;
 
-    QMediaPlayer* player_ = nullptr;
-
+    // 播放器类
+    QMediaPlayer* player_;
+    // 所有音乐列表
     QStringList musicList_;
-
+    // 音乐播放界面背景图列表
     QStringList backgroundList_;
-
+    // 每隔一秒设置进度条前进一格
     QTimer* timer_;
-
+    // 记录当前音乐播放进度
     quint32 musicSecondIndex_;
+    // 记录当前音乐的总时长
     quint32 curMusicSecondLength_;
+    // 当前播放的音乐条目
+    QListWidgetItem* curPlayItem_;
 };
 #endif // MAINWINDOW_H
