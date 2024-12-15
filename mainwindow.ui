@@ -358,13 +358,13 @@ QToolButton
               <number>5</number>
              </property>
              <property name="topMargin">
-              <number>5</number>
+              <number>10</number>
              </property>
              <property name="rightMargin">
               <number>5</number>
              </property>
              <property name="bottomMargin">
-              <number>5</number>
+              <number>10</number>
              </property>
              <item>
               <widget class="QToolButton" name="tBtnFile">
@@ -590,11 +590,11 @@ QToolButton
           <item>
            <widget class="QStackedWidget" name="stackedWidget">
             <property name="currentIndex">
-             <number>4</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="page_3"/>
             <widget class="QWidget" name="page_transfer"/>
-            <widget class="QWidget" name="page_file"/>
+            <widget class="FileWidget" name="page_file"/>
             <widget class="QWidget" name="page_upload">
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
@@ -1379,6 +1379,12 @@ QToolButton
    <class>BackLabel</class>
    <extends>QLabel</extends>
    <header location="global">backlabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FileWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">filewidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

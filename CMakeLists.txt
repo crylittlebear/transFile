@@ -28,7 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mainwindow.cpp mainwindow.h mainwindow.ui serverthread.cpp serverthread.h
 
         dragwidget.cpp dragwidget.h
-        downloaditemwidget.h downloaditemwidget.cpp downloaditemwidget.ui
+
         progressbar.cpp progressbar.h
         musiclistwidget.h musiclistwidget.cpp musiclistwidget.ui
         dragslider.h dragslider.cpp
@@ -41,6 +41,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         common.cpp common.h
         des.cpp des.h
         logger.cpp logger.h logininfoinstance.cpp logininfoinstance.h
+        fileinfo.h
+        filetransferprogress.h filetransferprogress.cpp filetransferprogress.ui
+        downloadtask.h downloadtask.cpp
+        downloadlayout.h downloadlayout.cpp
+        uploadlayout.h uploadlayout.cpp
+        uploadtask.h uploadtask.cpp
+        networkdata.h networkdata.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:

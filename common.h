@@ -19,7 +19,7 @@
 #define FILE_TYPE_DIR   "conf/fileType"
 #define RECORD_DIR      "conf/record"
 
-enum TransformStatus {
+enum class TransformStatus {
     StatusUpload,
     StatusDownload,
     StatusRecord
