@@ -201,6 +201,8 @@ void MainWindow::sltBtnVideoClicked()
 
 void MainWindow::sltBtnLogoutClicked()
 {
+    // TO DO 需要清空上传列表，下载列表以及文件列表
+
     emit sigLogout();
 }
 

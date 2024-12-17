@@ -30,7 +30,7 @@ public:
     ~FileWidget();
 
     // 刷新文件列表
-    void refreshFileList();
+    void refreshFiles();
 
     // 切换用户
     void changeUser();
@@ -45,15 +45,33 @@ private:
 
     void addMenu();
 
+    void addListWidgetItem(FileInfo* info);
+
     void buildMenuConnections();
 
     void dealFile(QString cmd);
+
+    void shareFile(FileInfo* info);
+
+    void deleteFile(FileInfo* info);
+
+    void showProperty(FileInfo* info);
+
+    void showFileItems();
 
     void uploadFile();
 
     void uploadFile(UploadFileInfo* fileInfo);
 
     void getMyFileCount(FileDisplayMode mode = FileDisplayMode::Normal);
+
+    void getMyFileList(FileDisplayMode mode = FileDisplayMode::Normal);
+
+    void refreshFileItems();
+
+    void clearItems();
+
+    void clearFileInfoList();
 
     void addUploadFiles();
 

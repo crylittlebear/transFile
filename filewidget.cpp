@@ -24,13 +24,17 @@ FileWidget::FileWidget(QWidget *parent)
     uploadTask_ = UploadTask::instance();
     downloadTask_ = DownloadTask::instance();
 
-
     checkTaskList();
 }
 
 FileWidget::~FileWidget()
 {
     delete ui;
+}
+
+void FileWidget::refreshFiles()
+{
+    getMyFileCount(FileDisplayMode::Normal);
 }
 
 void FileWidget::initListWidget()
@@ -75,6 +79,18 @@ void FileWidget::addMenu()
     menuEmpty_->addAction(actionDownloadDesc_);
     menuEmpty_->addAction(actionRefresh_);
     menuEmpty_->addAction(actionUpload_);
+
+    buildMenuConnections();
+}
+
+void FileWidget::addListWidgetItem(FileInfo *info)
+{
+    QString fileInfoName = QString("%1.png").arg(info->fileType);
+    QString fileName = common_->getFileType(fileInfoName);
+    QString filePath = QString("%1/%2").arg(FILE_TYPE_DIR).arg(fileName);
+    LOG_INFO(QString("fileName: %1").arg(fileName));
+
+    ui->listWidget->addItem(new QListWidgetItem(QIcon(filePath), info->fileName));
 }
 
 void FileWidget::buildMenuConnections()
@@ -122,7 +138,125 @@ void FileWidget::buildMenuConnections()
 
 void FileWidget::dealFile(QString cmd)
 {
+    QListWidgetItem* item = ui->listWidget->currentItem();
+    if (item == nullptr) {
+        LOG_INFO("select nothing");
+        return;
+    }
+    for (int i = 0; i < fileInfoList_.size(); ++i) {
+        FileInfo* info = fileInfoList_.at(i);
+        if (info->fileName == item->text()) {
+            if (cmd == "share") {
+                shareFile(info);
+            } else if (cmd == "delete") {
+                deleteFile(info);
+            } else if (cmd == "property") {
+                showProperty(info);
+            }
+            break;
+        }
+    }
+}
 
+void FileWidget::shareFile(FileInfo *info)
+{
+    QNetworkRequest request;
+    QString ip = common_->getConfigValue("web_server", "ip");
+    QString port = common_->getConfigValue("web_server", "port");
+
+    QString url = QString("http://%1:%2/dealfile?cmd=share").arg(ip).arg(port);
+    request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+
+    QJsonObject paramObj;
+    paramObj.insert("user", loginInfo_->user());
+    paramObj.insert("token", loginInfo_->token());
+    paramObj.insert("md5", info->md5);
+    paramObj.insert("filename", info->fileName);
+    QJsonDocument doc(paramObj);
+
+    QByteArray data = doc.toJson();
+    QNetworkReply* reply = networkManager_->post(request, data);
+
+    // 读取服务器返回的数据
+    connect(reply, &QNetworkReply::readyRead, this, [=]() {
+        QByteArray data = reply->readAll();
+        LOG_INFO(QString("服务器返回数据: %1").arg(QString(data)));
+        QString code = NetworkData::getCode(data);
+
+        if ("010" == code) {
+            // 分享成功
+            info->shareStatus = 1;
+            QMessageBox::information(this, "分享成功", QString("【%1】分享成功").arg(info->fileName));
+        } else if ("011" == code) {
+            QMessageBox::warning(this, "分享失败", QString("【%1】分享失败").arg(info->fileName));
+        } else if ("012" == code) {
+            QMessageBox::warning(this, "分享失败", QString("【%1】文件已被分享").arg(info->fileName));
+        } else if ("013" == code) {
+            QMessageBox::critical(this, "账号异常", "请重新登录");
+            emit sigLoginAgain();
+            return;
+        }
+    });
+}
+
+void FileWidget::deleteFile(FileInfo *info)
+{
+    QNetworkRequest request;
+    QString ip = common_->getConfigValue("web_server", "ip");
+    QString port = common_->getConfigValue("web_server", "port");
+    QString url = QString("http://%1/%2/dealfile?cmd=delete").arg(ip).arg(port);
+    request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+
+    QJsonObject paramObj;
+    paramObj.insert("user", loginInfo_->user());
+    paramObj.insert("token", loginInfo_->token());
+    paramObj.insert("md5", info->md5);
+    paramObj.insert("filename", info->fileName);
+    QJsonDocument doc(paramObj);
+
+    QByteArray data = doc.toJson();
+    QNetworkReply* reply = networkManager_->post(request, data);
+
+    connect(reply, &QNetworkReply::readyRead, this, [=]() {
+        QByteArray data = reply->readAll();
+        LOG_INFO(QString("receive data: %1").arg(QString(data)));
+        QString code = NetworkData::getCode(data);
+
+        if ("013" == code) {
+            QMessageBox::information(this, "删除成功", QString("【%1】文件删除成功").arg(info->fileName));
+            for (int i = 0; i < fileInfoList_.size(); ++i) {
+                if (fileInfoList_.at(i)->fileName == info->fileName) {
+                    for (int j = 0; j < ui->listWidget->count(); ++j) {
+                        QListWidgetItem* item = ui->listWidget->item(j);
+                        if (item->text() == info->fileName) {
+                            ui->listWidget->removeItemWidget(item);
+                            delete item;
+                            break;
+                        }
+                    }
+                    fileInfoList_.removeAt(i);
+                }
+            }
+        } else if ("014" == code) {
+            QMessageBox::warning(this, "删除失败", QString("【%1】文件删除失败").arg(info->fileName));
+        }
+    });
+}
+
+void FileWidget::showProperty(FileInfo *info)
+{
+
+}
+
+void FileWidget::showFileItems()
+{
+    int size = fileInfoList_.size();
+    for (int i = 0; i < size; ++i) {
+        FileInfo* info = fileInfoList_.at(i);
+        addListWidgetItem(info);
+    }
 }
 
 void FileWidget::uploadFile()
@@ -268,7 +402,113 @@ void FileWidget::uploadFile(UploadFileInfo *fileInfo)
 
 void FileWidget::getMyFileCount(FileDisplayMode mode)
 {
+    fileCount_ = 0;
 
+    QNetworkRequest request;
+    QString ip = common_->getConfigValue("web_server", "ip");
+    QString port = common_->getConfigValue("web_server", "port");
+    QString url = QString("http://%1:%2/myfiles?cmd=count").arg(ip).arg(port);
+    request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+
+    QJsonObject paramObj;
+    paramObj.insert("user", loginInfo_->user());
+    paramObj.insert("token", loginInfo_->token());
+    QJsonDocument doc(paramObj);
+
+    QByteArray data = doc.toJson();
+    QNetworkReply* reply = networkManager_->post(request, data);
+
+    connect(reply, &QNetworkReply::readyRead, [=]() {
+        QByteArray data = reply->readAll();
+        LOG_INFO(data);
+        QStringList list = NetworkData::getFileCount(data);
+        if (!list.empty()) {
+            QString code = list.at(0);
+            if ("110" == code) {
+                fileCount_ = list.at(1).toInt();
+            } else if ("111" == code) {
+                QMessageBox::warning(this, "账号异常", "请重新登录");
+                emit sigLoginAgain();
+                return;
+            }
+        }
+        if (fileCount_ > 0) {
+            getMyFileList(mode);
+        } else {
+            refreshFileItems();
+        }
+        reply->deleteLater();
+    });
+}
+
+void FileWidget::getMyFileList(FileDisplayMode mode)
+{
+    QString strCmd;
+    if (mode == FileDisplayMode::Normal) {
+        strCmd = "normal";
+    } else if (mode == FileDisplayMode::Asc) {
+        strCmd = "pvasc";
+    } else if (mode == FileDisplayMode::Desc) {
+        strCmd = "pvdesc";
+    }
+
+    QNetworkRequest request;
+    QString ip = common_->getConfigValue("web_server", "ip");
+    QString port = common_->getConfigValue("web_server", "port");
+    QString url = QString("http://%1:%2/myfiles?cmd=%3").arg(ip).arg(port).arg(strCmd);
+    request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+
+    QJsonObject paramObj;
+    paramObj.insert("user", loginInfo_->user());
+    paramObj.insert("token", loginInfo_->token());
+    paramObj.insert("start", 0);
+    paramObj.insert("count", fileCount_);
+    QJsonDocument doc(paramObj);
+
+    QByteArray data = doc.toJson();
+    QNetworkReply* reply = networkManager_->post(request, data);
+
+    connect(reply, &QNetworkReply::readyRead, this, [=]() {
+        QByteArray data = reply->readAll();
+        LOG_INFO(QString("接收到数据: %1").arg(QString(data)));
+
+        clearFileInfoList();
+
+        QList<FileInfo*> fileList = NetworkData::getFileInfo(data);
+
+        reply->deleteLater();
+
+        clearItems();
+
+        showFileItems();
+    });
+}
+
+void FileWidget::refreshFileItems()
+{
+    // 首先情况原先的显示条目
+    clearItems();
+
+    // 如果文件列表不空，则显示文件列表
+    if (!fileInfoList_.empty()) {
+        for (int i = 0; i < fileInfoList_.size(); ++i) {
+            FileInfo* info = fileInfoList_.at(i);
+
+            // 添加到显示列表中
+            addListWidgetItem(info);
+        }
+    }
+}
+
+void FileWidget::clearItems()
+{
+    int size = ui->listWidget->count();
+    for (int i = 0; i < size; ++i) {
+        QListWidgetItem* item = ui->listWidget->takeItem(0);
+        delete item;
+    }
 }
 
 void FileWidget::addUploadFiles()
@@ -422,5 +662,16 @@ void FileWidget::sltRightMenu(const QPoint& pos)
         menuEmpty_->exec(QCursor::pos());
     } else {
         menuItem_->exec(QCursor::pos());
+    }
+}
+
+void FileWidget::clearFileInfoList()
+{
+    int size = fileInfoList_.size();
+    for (int i = 0; i < size; ++i) {
+        FileInfo* info = fileInfoList_.takeFirst();
+        if (info != nullptr) {
+            delete info;
+        }
     }
 }

@@ -56,5 +56,7 @@
         <file>img/musicIcon/mute.png</file>
         <file>img/musicIcon/shuffle.png</file>
         <file>img/gear.png</file>
+        <file>img/download.png</file>
+        <file>img/uploadList.png</file>
     </qresource>
 </RCC>
